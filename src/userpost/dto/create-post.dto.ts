@@ -3,5 +3,5 @@ export class CreatePostDto {
   dateCreated: string;
   body: string;
   tags: string;
-  userId: string;
+  userId: number;
 }

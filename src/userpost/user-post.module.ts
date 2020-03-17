@@ -9,4 +9,4 @@ import { UserPostRepository } from './user-post.repository';
   controllers: [UserPostController],
   providers: [UserPostService],
 })
-export class UserPostsModule {}
+export class UserPostModule {}

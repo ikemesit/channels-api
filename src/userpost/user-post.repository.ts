@@ -18,7 +18,7 @@ export class UserPostRepository extends Repository<UserPost> {
     newPost.body = body;
     newPost.dateCreated = dateCreated;
     newPost.tags = tags;
-    newPost.userId = Number(userId);
+    newPost.userId = userId;
 
     await newPost.save();
     return newPost;
