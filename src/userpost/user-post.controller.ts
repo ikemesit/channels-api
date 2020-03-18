@@ -7,6 +7,7 @@ import {
   Body,
   Patch,
   Delete,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UserPostService } from './user-post.service';
 import { UserPost } from './user-post.entity';
@@ -30,7 +31,7 @@ export class UserPostController {
   }
 
   @Post()
-  create(@Body() createPostDto: CreatePostDto) {
+  create(@Body(ValidationPipe) createPostDto: CreatePostDto) {
     return this.userPostService.createPost(createPostDto);
   }
 
