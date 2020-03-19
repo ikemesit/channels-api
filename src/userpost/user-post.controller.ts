@@ -33,7 +33,7 @@ export class UserPostController {
   }
 
   @Post()
-  @UsePipes(ValidationPipe)
+  // @UsePipes(ValidationPipe)
   create(@Body() createPostDto: CreatePostDto) {
     return this.userPostService.createPost(createPostDto);
   }

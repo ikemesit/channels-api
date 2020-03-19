@@ -4,9 +4,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { typeormConfig } from './config/typeorm.config';
 import { UserPostModule } from './userpost/user-post.module';
+import { ChannelModule } from './channel/channel.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(typeormConfig), UserPostModule],
+  imports: [
+    TypeOrmModule.forRoot(typeormConfig),
+    UserPostModule,
+    ChannelModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
