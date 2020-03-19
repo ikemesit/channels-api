@@ -8,6 +8,8 @@ import {
   Patch,
   Delete,
   ValidationPipe,
+  UsePipes,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UserPostService } from './user-post.service';
 import { UserPost } from './user-post.entity';
@@ -26,25 +28,26 @@ export class UserPostController {
   }
 
   @Get(':id')
-  findById(@Param('id') id: number): Promise<UserPost> {
-    return this.userPostService.findPostById(Number(id));
+  findById(@Param('id', ParseIntPipe) id: number): Promise<UserPost> {
+    return this.userPostService.findPostById(id);
   }
 
   @Post()
-  create(@Body(ValidationPipe) createPostDto: CreatePostDto) {
+  @UsePipes(ValidationPipe)
+  create(@Body() createPostDto: CreatePostDto) {
     return this.userPostService.createPost(createPostDto);
   }
 
   @Patch(':id')
   update(
     @Body() updatePostDto: UpdatePostDto,
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
   ): Promise<UserPost> {
-    return this.userPostService.updatePost(Number(id), updatePostDto);
+    return this.userPostService.updatePost(id, updatePostDto);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string): Promise<void> {
-    return this.userPostService.deletePost(Number(id));
+  delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.userPostService.deletePost(id);
   }
 }
