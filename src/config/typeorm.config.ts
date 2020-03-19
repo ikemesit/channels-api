@@ -1,5 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { UserPost } from '../userpost/user-post.entity';
+import { Channel } from '../channel/channel.entity';
 
 export const typeormConfig: TypeOrmModuleOptions = {
   type: 'postgres',
@@ -8,6 +9,6 @@ export const typeormConfig: TypeOrmModuleOptions = {
   username: 'postgres',
   password: 'postgres',
   database: 'myapp',
-  entities: [UserPost],
+  entities: [UserPost, Channel],
   synchronize: true,
 };

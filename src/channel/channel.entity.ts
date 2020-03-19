@@ -1,5 +1,6 @@
-import { BaseEntity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { BaseEntity, PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
 
+@Entity()
 export class Channel extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
