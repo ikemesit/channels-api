@@ -2,7 +2,6 @@ import {
   Injectable,
   NotFoundException,
   InternalServerErrorException,
-  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChannelRepository } from './channel.repository';
