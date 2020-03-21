@@ -6,6 +6,7 @@ import {
   ConflictException,
   InternalServerErrorException,
 } from '@nestjs/common';
+import { SigninCredentialsDto } from './dto/signinCredentials.dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
@@ -39,6 +40,19 @@ export class UserRepository extends Repository<User> {
     }
 
     return user;
+  }
+
+  async validateUserPassword(
+    signinCredentialsDto: SigninCredentialsDto,
+  ): Promise<User> {
+    const { username, password } = signinCredentialsDto;
+    const user = await this.findOne({ username });
+
+    if (user && (await user.validatePassword(password))) {
+      return user;
+    } else {
+      return null;
+    }
   }
 
   private async hashPassword(password: string, salt: string): Promise<string> {
