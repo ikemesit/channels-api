@@ -1,48 +1,41 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserRepository } from './user.respository';
+import { UserRepository } from '../user/user.respository';
 import { SignupCredentialsDto } from './dto/signupCredentials.dto';
-import { User } from './user.entity';
+import { User } from '../user/user.entity';
 import { SigninCredentialsDto } from './dto/signinCredentials.dto';
 import { AuthResult } from './interfaces/auth-result.interface';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { JwtService } from '@nestjs/jwt';
+import { UserService } from '../user/user.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(UserRepository)
-    private userRepository: UserRepository,
-    private jwtService: JwtService,
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async signUp(signupCredentialsDto: SignupCredentialsDto): Promise<User> {
-    return this.userRepository.signUp(signupCredentialsDto);
+    return this.userService.signUp(signupCredentialsDto);
   }
 
-  async signIn(
-    signinCredentialsDto: SigninCredentialsDto,
-  ): Promise<AuthResult> {
-    const user = await this.userRepository.validateUserPassword(
-      signinCredentialsDto,
-    );
+  async login(user: User): Promise<AuthResult> {
+    const payload = { username: user.username, sub: user.id };
+    const expiresIn = 3600;
 
-    if (!user || !user.username) {
-      throw new UnauthorizedException('Invalid credentials');
+    return { accessToken: this.jwtService.sign(payload), expiresIn, user };
+  }
+
+  async validateUser(username: string, pass: string): Promise<Partial<User>> {
+    const user = await this.userService.findOne(username);
+
+    if (user && user.password === (await bcrypt.hash(pass, user.salt))) {
+      const { password, salt, ...result } = user;
+      return result;
     }
 
-    const payload: JwtPayload = { username: user.username };
-    const expiresIn = 3600;
-    const accessToken = await this.jwtService.sign(payload);
-
-    // Strip sensitive & irrelevant properties
-    delete user.password;
-    delete user.salt;
-    delete user.validatePassword;
-    delete user.save;
-    delete user.hasId;
-    delete user.remove;
-
-    return { accessToken, expiresIn, user };
+    return null;
   }
 }

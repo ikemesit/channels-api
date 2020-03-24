@@ -1,9 +1,16 @@
-import { Controller, Inject, Post, Body, ValidationPipe } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  ValidationPipe,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignupCredentialsDto } from './dto/signupCredentials.dto';
-import { User } from './user.entity';
-import { SigninCredentialsDto } from './dto/signinCredentials.dto';
+import { User } from '../user/user.entity';
 import { AuthResult } from './interfaces/auth-result.interface';
+import { LocalAuthGuard } from './local-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -16,10 +23,9 @@ export class AuthController {
     return this.authService.signUp(signupCredentialsDto);
   }
 
-  @Post('signin')
-  signIn(
-    @Body(ValidationPipe) signinCredentialsDto: SigninCredentialsDto,
-  ): Promise<AuthResult> {
-    return this.authService.signIn(signinCredentialsDto);
+  @UseGuards(LocalAuthGuard)
+  @Post('login')
+  login(@Req() req: any): Promise<AuthResult> {
+    return this.authService.login(req.user);
   }
 }

@@ -6,6 +6,7 @@ import { typeormConfig } from './config/typeorm.config';
 import { UserPostModule } from './userpost/user-post.module';
 import { ChannelModule } from './channel/channel.module';
 import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { AuthModule } from './auth/auth.module';
     UserPostModule,
     ChannelModule,
     AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
