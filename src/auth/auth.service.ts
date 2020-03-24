@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { SignupCredentialsDto } from './dto/signupCredentials.dto';
 import { User } from '../user/user.entity';
 import { AuthResult } from './interfaces/auth-result.interface';
